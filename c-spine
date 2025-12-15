@@ -105,15 +105,18 @@
 
 <script>
 const questions = [
-  "Midline cervical spine tenderness?",
-  "Neurologic deficit present?",
-  "Patient intoxicated?",
-  "Distracting injury present?",
-  "Altered mental status?"
+  "High risk or questionable spinal injury mechanism?",
+  "Patient age greater than 65 or less than 3 years old?",
+  "Patient incompetent to participate in the exam?",
+  "Midline spinal pain or tenderness with palpation?",
+  "Abnormal (not baseline) neurologic function or motor strength?",
+  "Numbness or tingling (paresthesia)?",
+  "Sensation diminished and/or asymmetrical?",
+  "Cervical rotation to 45° or flexion/extension elicits midline pain?"
 ];
 
 let index = 0;
-let collarRequired = false;
+let smrRequired = false;
 
 function render() {
   if (index < questions.length) {
@@ -122,17 +125,23 @@ function render() {
       `Question ${index + 1} of ${questions.length}`;
   } else {
     document.querySelector(".buttons").style.display = "none";
-    document.getElementById("question").innerHTML =
-      collarRequired
-        ? "Assessment complete"
-        : "<span class='done'>No Collar Indicated</span>";
+
+    if (smrRequired) {
+      document.getElementById("question").innerHTML =
+        "Assessment Complete";
+    } else {
+      document.getElementById("warning").style.display = "none";
+      document.getElementById("question").innerHTML =
+        "<span class='done'>Spinal Motion Restriction NOT Required<br><small>(Per CT OEMS)</small></span>";
+    }
+
     document.getElementById("progress").textContent = "";
   }
 }
 
 function answer(isYes) {
   if (isYes) {
-    collarRequired = true;
+    smrRequired = true;
     document.getElementById("warning").style.display = "block";
   }
   index++;
